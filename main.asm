@@ -21,6 +21,8 @@ SECTION "Includes_banks",ROMX
 INCLUDE "meat_logo_tiles.inc"
 INCLUDE "font_main_tiles.inc"
 INCLUDE "meat_games_background_map.inc"
+INCLUDE "main_splash_tiles.inc"
+INCLUDE "main_splash_background_map.inc"
 
 ; Macro for copying a rectangular region into VRAM
 ; Changes ALL registers
@@ -106,7 +108,7 @@ TitleLoop:
     dec b 
     ld a, b
     cp 0 
-    
+
     jr nz, .loop
 
     jr TransitionToMainMenu
@@ -168,11 +170,24 @@ TransitionToMainMenu:
     call FadeOut
     
     ; Now that the screen is completely black, load the game graphics
+    ld a, BANK(main_splash_tiles)
+    ld [ROM_BANK_SWITCH], a 
+    
+    ld hl, main_splash_tiles
+    ld de, TILEDATA_START
+    ld bc, main_splash_tiles_data_size
+    call mCopyVRAM
+
     ; Clear out the background 
     ld a, 1 
     ld hl, BACKGROUND_MAPDATA_START
     ld bc, 32*32
     call mSetVRAM
+
+    ld a, BANK(main_splash_background_map)
+    ld [ROM_BANK_SWITCH], a 
+
+    CopyRegionToVRAM 18, 20, main_splash_background_map, BACKGROUND_MAPDATA_START
 
     call FadeIn
 

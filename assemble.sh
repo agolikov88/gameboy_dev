@@ -28,6 +28,8 @@ fi
 rgbasm -omeat_logo_tiles.o meat_logo_tiles.z80
 rgbasm -ofont_main_tiles.o font_main_tiles.z80
 rgbasm -omeat_games_background_map.o meat_games_background_map.z80
+rgbasm -omain_splash_tiles.o main_splash_tiles.z80
+rgbasm -omain_splash_background_map.o main_splash_background_map.z80
 
 rgbasm -o$name.o $name.asm
 
@@ -39,7 +41,7 @@ else
 fi
 
 #link all resources
-rgblink -o $name.gb -m $name.map -n $name.sym $name.o meat_logo_tiles.o font_main_tiles.o meat_games_background_map.o
+rgblink -o $name.gb -m $name.map -n $name.sym $name.o meat_logo_tiles.o font_main_tiles.o meat_games_background_map.o main_splash_tiles.o main_splash_background_map.o
 
 echo "Compilation step 3/4: Fixing..."
 rgbfix -v -p 0x00 $name.gb
