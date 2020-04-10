@@ -179,7 +179,7 @@ TransitionToMainMenu:
     call mCopyVRAM
 
     ; Clear out the background 
-    ld a, 1 
+    ld a, 0
     ld hl, BACKGROUND_MAPDATA_START
     ld bc, 32*32
     call mSetVRAM
