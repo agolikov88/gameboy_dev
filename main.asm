@@ -199,6 +199,46 @@ TransitionToMainMenu:
     ld hl, MenuText ; text to write 
     call RenderTextToEnd
 
+    jp MenuLoop
+
+MenuLoop:
+
+    halt 
+    nop
+
+    call ReadKeys
+    and KEY_A | KEY_START
+    cp 0
+    
+    jp nz, TransitionToGameLoop
+
+    jr MenuLoop
+
+TransitionToGameLoop:
+
+    call FadeOut
+    
+    ; Clear out the background
+    ld a, 0 
+    ld hl, TILEDATA_START
+    ld bc, main_splash_tiles_data_size
+    call mSetVRAM
+
+    ld a, 0
+    ld hl, BACKGROUND_MAPDATA_START
+    ld bc, 32*32
+    call mSetVRAM
+
+    ; Show main menu text
+    ld b, $d0 ; end character 
+    ld c, 0 ; draw to background
+    ld d, 3 ; X start position (0-19)
+    ld e, 4 ; Y start position (0-17)
+    ld hl, GamePlaceholderText ; text to write 
+    call RenderTextToEnd
+
+    call FadeIn
+
     jp GameLoop
 
 GameLoop:
@@ -247,3 +287,6 @@ DB "MEAT GAMES<end>"
 
 MenuText:
 DB "HORRIBLE DEATH<end>"
+
+GamePlaceholderText:
+DB "GAME PLACEHOLDER<end>"
